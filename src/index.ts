@@ -31,7 +31,7 @@ type Equipment = {
     description: string,
     id: number,
     name: string,
-    image: string,     
+    image: string,
     attack: number,
     defense: number
 };
@@ -41,16 +41,18 @@ const materials: Material[] = botwData.data.materials;
 const equipment: Equipment[] = botwEquipment;
 
 
-const obj :any = {}
+const locationsOutput: any = {}
 
 
-for(let i=0;i<monsters.length;i++)
-{
-    for(let j=0; j<monsters[i].common_locations.length;j++){
+for (let i = 0; i < monsters.length; i++) {
+    for (let j = 0; j < monsters[i].common_locations.length; j++) {
         let b = monsters[i];
         let c = b.common_locations;
-        if(obj[c[j]] === undefined) obj[b.common_locations[j]] = [];
-        let a = obj[b.common_locations[j]];
+
+        if (locationsOutput[c[j]] === undefined)
+            locationsOutput[b.common_locations[j]] = [];
+
+        let a = locationsOutput[b.common_locations[j]];
         a.push({
             category: b.category,
             descriptions: b.description,
@@ -60,3 +62,25 @@ for(let i=0;i<monsters.length;i++)
         });
     }
 }
+
+//console.log(locationsOutput);
+
+const newLocationsOutput: any = {};
+
+const locations = monsters.reduce((cul, monster) => {
+    for(let monsterLocation of monster.common_locations) {
+        if (cul[monsterLocation] === undefined)
+            cul[monsterLocation] = [];
+            
+        cul[monsterLocation].push({
+            category: monster.category,
+            descriptions: monster.description,
+            drops: monster.drops,
+            image: monster.image,
+            name: monster.name
+        })
+    }
+    return cul;
+}, newLocationsOutput);
+
+console.log(newLocationsOutput);
